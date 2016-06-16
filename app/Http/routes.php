@@ -1,16 +1,44 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
-|
-*/
+use App\User;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
-    return view('welcome');
+  $users = User::orderBy('created_at', 'desc')->get();
+
+  return view('index', ['users' => $users]);
+});
+
+/**
+ * Add A New user
+ */
+Route::post('/user', function (Request $request) {
+  $validator = Validator::make($request->all(), [
+    'name' => 'required|max:100',
+    'address' => 'required|max:300',
+    'age' => 'required|max:2'
+  ]);
+
+  if ($validator->fails()) {
+    return redirect('/')
+      ->withInput()
+      ->withErrors($validator);
+  }
+
+  $user = new User;
+  $user->name = $request->name;
+  $user->address = $request->address;
+  $user->age = $request->age;
+  $user->save();
+
+  return redirect('/');
+});
+
+/**
+ * Delete An Existing user
+ */
+Route::delete('/user/{id}', function ($id) {
+  User::findOrFail($id)->delete();
+
+  return redirect('/');
 });
