@@ -23,7 +23,7 @@ class UserController extends Controller
     $user->name = $input['name'];
     $user->address = $input['address'];
     $user->age = $input['age'];
-
+    
     $user->save();
     return redirect('user');
   }
@@ -42,18 +42,21 @@ class UserController extends Controller
 
   public function edit($id)
   {
-    $user = User::find($id);
-    return view('user.edit', compact('user'));
+    $user = User::findOrFail($id);
+    return view('user.edit')->withUser($user);
   }
 
   public function update($id, Request $request)
   {
-    $user = User::find($id);
-    $input = Input::all();
-    $user->name = $input['name'];
-    $user->address = $input['address'];
-    $user->age = $input['age'];
-    $user->save();
+    $user = User::findOrFail($id);
+
+    $this->validate($request, [
+      'name' => 'required|unique:users|max:100',
+      'address' => 'required|max:300',
+      'age' => 'required|numeric|digits:2'
+    ]);
+    $input = $request->all();
+    $user->fill($input)->save();
     return redirect('user');
   }
 }

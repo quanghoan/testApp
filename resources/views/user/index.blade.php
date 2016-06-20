@@ -4,7 +4,7 @@
   <div class="col-sm-4">
       @include('common.errors')
       <!-- New user Form -->
-      <form action="/user" method="POST" class="form-horizontal">
+      <!-- <form action="/user" method="POST" class="form-horizontal">
         {{ csrf_field() }}
         <div class="form-group">
 
@@ -31,7 +31,30 @@
               Add user
             </button>
         </div>
-      </form>
+      </form> -->
+      <h1>Add new user</h1>
+      {!! Form::open([
+        'route' => 'user.store'
+      ]) !!}
+
+      <div class="form-group">
+        {!! Form::label('name', 'Name:', ['class' => 'control-label']) !!}
+        {!! Form::text('name', null, ['class' => 'form-control']) !!}
+      </div>
+
+      <div class="form-group">
+        {!! Form::label('address', 'Address:', ['class' => 'control-label']) !!}
+        {!! Form::text('address', null, ['class' => 'form-control']) !!}
+      </div>
+
+      <div class="form-group">
+        {!! Form::label('age', 'Age:', ['class' => 'control-label']) !!}
+        {!! Form::text('age', null, ['class' => 'form-control']) !!}
+      </div>
+
+      {!! Form::submit('Create user', ['class' => 'btn btn-primary']) !!}
+
+      {!! Form::close() !!}
     </div> 
     <!-- Current users -->
     @if (count($users) > 0)
@@ -71,7 +94,7 @@
                       {{ method_field('DELETE') }}
                       <button class="btn btn-danger">Delete</button>
                     </form>
-                    {{ link_to_route('user.edit', 'Edit', array($user->id), array('class' => 'btn btn-info')) }}
+                    <a href="{{ route('user.edit', $user->id) }}">Edit</a>
                   </td>
                 </tr>
               @endforeach
