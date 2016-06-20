@@ -16,14 +16,18 @@ class UserController extends Controller
     $this->validate($request, [
       'name' => 'required|unique:users|max:100',
       'address' => 'required|max:300',
-      'age' => 'required|numeric|digits:2'
+      'age' => 'required|numeric|digits:2',
+      'photo' => 'required'
     ]);
     $input = $request->all();
+    $photo = $request->file('photo');
+    $photo_name = $photo->getClientOriginalName();
+    $photo->move('avatar', $photo_name);
     $user = new User();
     $user->name = $input['name'];
     $user->address = $input['address'];
     $user->age = $input['age'];
-    
+    $user->photo = $photo_name;
     $user->save();
     return redirect('user');
   }
@@ -51,12 +55,15 @@ class UserController extends Controller
     $user = User::findOrFail($id);
 
     $this->validate($request, [
-      'name' => 'required|unique:users|max:100',
+      'name' => 'required|max:100',
       'address' => 'required|max:300',
       'age' => 'required|numeric|digits:2'
     ]);
     $input = $request->all();
-    $user->fill($input)->save();
+    $user->name = $input['name'];
+    $user->address = $input['address'];
+    $user->age = $input['age'];
+    $user->save();
     return redirect('user');
   }
 }

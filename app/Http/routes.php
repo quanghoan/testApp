@@ -38,9 +38,7 @@ Route::get('/', function () {
   return view('welcome');
 });
 
-// Route::group(['middleware' => ['web']], function () {
 Route::resource('user', 'UserController');
 Route::get('getusers', 'UserController@getusers');
 Route::get('user/{$id}/edit', 'UserController@edit');
-Route::post('user/create', 'UserController@update');
-// });
+Route::post('user/{$id}', 'UserController@update');

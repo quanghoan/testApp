@@ -34,7 +34,7 @@
       </form> -->
       <h1>Add new user</h1>
       {!! Form::open([
-        'route' => 'user.store'
+        'route' => 'user.store','files' => true
       ]) !!}
 
       <div class="form-group">
@@ -52,6 +52,9 @@
         {!! Form::text('age', null, ['class' => 'form-control']) !!}
       </div>
 
+      {!! Form::label('photo', 'Photo') !!}
+      {!! Form::file('photo', null, array( 'class'=>'form-control')) !!}
+
       {!! Form::submit('Create user', ['class' => 'btn btn-primary']) !!}
 
       {!! Form::close() !!}
@@ -63,8 +66,6 @@
 
         <div class="panel-body">
           <table class="table table-bordered">
-
-            <!-- Table Headings -->
             <thead>
               <th>Id</th>
               <th>Photo</th>
@@ -74,7 +75,6 @@
               <th>Action</th>
             </thead>
 
-            <!-- Table Body -->
             <tbody>
               @foreach ($users as $user)
                 <tr>
@@ -82,19 +82,19 @@
                     <div>{{ $user->id }}</div>
                   </td>
                   <!-- user Name -->
-                  <td>{{ $user->photo }}</td>
+                  <td width="100" height="100"><img src="avatar/{{ $user->photo }}" width="100" height="100"></td>
                   <td>{{ $user->name }}</td>
                   <td>{{ $user->address }}</td>
                   <td>{{ $user->age }}</td>
 
                   <!-- Delete Button -->
                   <td>
+                    <a href="{{ route('user.edit', $user->id) }}" class="btn btn-info">Edit</a>
                     <form action="/user/{{ $user->id }}" method="POST">
                       {{ csrf_field() }}
                       {{ method_field('DELETE') }}
                       <button class="btn btn-danger">Delete</button>
                     </form>
-                    <a href="{{ route('user.edit', $user->id) }}">Edit</a>
                   </td>
                 </tr>
               @endforeach
