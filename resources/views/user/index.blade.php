@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-  <div class="col-sm-4">
+  <div class="col-sm-4" ng-app="">
       @include('common.errors')
       <!-- New user Form -->
       <!-- <form action="/user" method="POST" class="form-horizontal">
@@ -43,7 +43,7 @@
       </div>
 
       <div class="form-group">
-        {!! Form::label('address', 'Address:', ['class' => 'control-label']) !!}
+        {!! Form::label('address', 'Address:', ['class' => 'control-label', 'ng-model' => 'user.name']) !!}
         {!! Form::text('address', null, ['class' => 'form-control']) !!}
       </div>
 
@@ -56,8 +56,8 @@
       {!! Form::file('photo', null, array( 'class'=>'form-control')) !!}
 
       {!! Form::submit('Create user', ['class' => 'btn btn-primary']) !!}
-
       {!! Form::close() !!}
+      
     </div> 
     <!-- Current users -->
     @if (count($users) > 0)

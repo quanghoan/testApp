@@ -6,7 +6,8 @@
     <h1>Edit user</h1>
     {!! Form::model($user, [
       'method' => 'PATCH',
-      'route' => ['user.update', $user->id]
+      'route' => ['user.update', $user->id],
+      'files'=>true
     ]) !!}
 
     <div class="form-group">
@@ -23,6 +24,7 @@
       {!! Form::label('age', 'Age:', ['class' => 'control-label']) !!}
       {!! Form::text('age', null, ['class' => 'form-control']) !!}
     </div>
+    {!! Form::file('photo', null, array( 'class'=>'form-control')) !!}
     {!! Form::submit('Update user', ['class' => 'btn btn-primary']) !!}
 
     {!! Form::close() !!}

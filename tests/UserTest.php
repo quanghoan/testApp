@@ -16,7 +16,7 @@ class UserTest extends TestCase
     $this->assertTrue(true);
   }
 
-  public function testIndex()
+  public function index()
   {
     $this->call('GET', 'user');
     $this->visit('user')->see('Add new user');
@@ -24,7 +24,7 @@ class UserTest extends TestCase
   }
 
 
-  public function valid_user()
+  public function store()
   {
     $response = $this->call('POST', '/user', [
       'name' => 'dao quang hoan',

@@ -41,4 +41,3 @@ Route::get('/', function () {
 Route::resource('user', 'UserController');
 Route::get('getusers', 'UserController@getusers');
 Route::get('user/{$id}/edit', 'UserController@edit');
-Route::post('user/{$id}', 'UserController@update');
