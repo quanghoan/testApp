@@ -58,12 +58,14 @@ class UserController extends Controller
     $this->validate($request, [
       'name' => 'required|max:100',
       'address' => 'required|max:300',
-      'age' => 'required|numeric|digits:2'
+      'age' => 'required|numeric|digits:2',
+      'photo' => 'required'
     ]);
     $input = $request->all();
     $user->name = $input['name'];
     $user->address = $input['address'];
     $user->age = $input['age'];
+    $user->photo = $input['photo'];
     $user->save();
     return redirect('user');
   }

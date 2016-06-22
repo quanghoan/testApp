@@ -1,74 +1,37 @@
 
-var app = angular.module('TestApp', [], function($interpolateProvider) {
+var app = angular.module('hoandq', [], function($interpolateProvider) {
   $interpolateProvider.startSymbol('<%');
   $interpolateProvider.endSymbol('%>');
 });
 
-app.controller('TestController', function ($scope, $http) {
-  $scope.members = [];
-  $scope.isEdit = false;
-  $scope.memID = "";
-  $scope.deleteID = "";
-  $scope.member = {
+app.controller('quanghoan', function ($scope, $http) {
+  $scope.user = {
     name: "",
-    email: "",
-    phone: "",
-    image: ""
+    address: "",
+    age: "",
+    photo: ""
   };
 
-  $scope.getMember = function () {
-    $http.get('/getmembers')
+  $scope.users = [];
+  $scope.getusers = function () {
+    $http.get('/getusers')
       .then(function (data) {
-        $scope.members = data.data;
+        $scope.users = data.data;
       });
   };
-  $scope.getMember();
-  $scope.Edit = function (id) {
-    $scope.isEdit = true;
-    $scope.memID = id;
+  $scope.getusers();
+
+  $scope.user_id = "";
+  $scope.deleteUser = function (id) {
+    $scope.user_id = id;
+    $http.delete('/user/' + $scope.user_id, $scope.user).then($scope.getusers(), errorCallback);
   };
-  $scope.saveData = function () {
-    // Posting data to php file
+
+  $scope.createUser = function () {
     $http({
       method: 'POST',
-      url: '/member',
-      data: JSON.stringify($scope.member),  //forms user object
-      //headers : {'Content-Type': 'application/x-www-form-urlencoded'}
+      url: '/user',
+      data: JSON.stringify($scope.user),
     })
-      .success(function (data) {
-        $scope.getMember();
-        console.log(data);
-      }).error(function (data) {
-      console.log(data);
-    });
   };
-
-  $scope.saveEditData = function () {
-    $http({
-      method: 'PATCH',
-      url: '/member/'+$scope.memID ,
-      data: JSON.stringify($scope.member),  //forms user object
-    })
-    .success(function (data) {
-      $scope.getMember();
-      console.log(data);
-    })
-    .error(function (data) {
-      console.log('There was a problem. Status: ' + status + '; Data: ' + data);
-    });
-    $http.patch('/member/' + $scope.memID, $scope.member).then($scope.getMember(), errorCallback);
-  };
-
-  $scope.deleteData = function (id) {
-    $scope.deleteID = id;
-    //$http({
-    //    method: 'DELETE',
-    //    url: '/member/'+$scope.deleteID,
-    //}).then(function mySucces(response) {
-    //    $scope.getMember();
-    //}, function myError(response) {
-    //    $scope.myWelcome = response.statusText;
-    //});
-    $http.delete('/member/' + $scope.deleteID, $scope.member).then($scope.getMember(), errorCallback);
-  };
-});
+});  

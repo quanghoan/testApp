@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('main')
 
 @section('content')
   <div class="col-sm-4">
@@ -24,10 +24,11 @@
       {!! Form::label('age', 'Age:', ['class' => 'control-label']) !!}
       {!! Form::text('age', null, ['class' => 'form-control']) !!}
     </div>
+    {!! Form::label('photo', 'Photo', ['class' => 'control-label']) !!}
     {!! Form::file('photo', null, array( 'class'=>'form-control')) !!}
     {!! Form::submit('Update user', ['class' => 'btn btn-primary']) !!}
 
     {!! Form::close() !!}
-    <a href="{{url('/user')}}">Index</a>
+    <a href="{{url('/user')}}">Back to list</a>
   </div>
 @stop
