@@ -8,6 +8,7 @@ class UserController extends Controller
 {
   public function index()
   {
+    
     return view('user.index')->with('users', User::orderBy('created_at', 'desc')->get());
   }
 
@@ -34,7 +35,7 @@ class UserController extends Controller
 
   public function getusers()
   {
-    return User::orderBy('name')->get();
+    return User::orderBy('created_at', 'desc')->get();
   }
 
   public function destroy($id)

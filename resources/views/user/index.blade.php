@@ -1,107 +1,66 @@
 @extends('layouts.app')
 
 @section('content')
-  <div class="col-sm-4" ng-app="">
-      @include('common.errors')
-      <!-- New user Form -->
-      <!-- <form action="/user" method="POST" class="form-horizontal">
-        {{ csrf_field() }}
-        <div class="form-group">
 
-          <h1>Add new user</h1>
-
-          <div class="form-group">
-            <label>Name</label>
-            <input type="text" name="name" id="user-name" class="form-control">
-          </div>
-
-          <div class="form-group">
-            <label>Address</label>
-            <input type="text" name="address" id="user-address" class="form-control">
-          </div>
-
-          <div class="form-group">
-            <label>Age</label>
-            <input type="text" name="age" id="user-age" class="form-control">
-          </div>
-        </div>
-
-        <div class="form-group">
-            <button type="submit" class="btn btn-success">
-              Add user
-            </button>
-        </div>
-      </form> -->
-      <h1>Add new user</h1>
-      {!! Form::open([
-        'route' => 'user.store','files' => true
-      ]) !!}
+  <div class="row" ng-app="TestApp" ng-controller="TestController">
+    <div class="col-md-4">
+      <h1 ng-if="isEdit==false">Add new member</h1>
+      <h1 ng-if="isEdit==true">Edit Member</h1>
 
       <div class="form-group">
-        {!! Form::label('name', 'Name:', ['class' => 'control-label']) !!}
-        {!! Form::text('name', null, ['class' => 'form-control']) !!}
-      </div>
+        {{--<input name="_method" type="hidden" value="PATCH">--}}
 
+        {!! Form::label('name', 'Name') !!}
+        {!! Form::text('name', null, array( 'class'=>'form-control', 'ng-model' => 'member.name')) !!}
+      </div>
       <div class="form-group">
-        {!! Form::label('address', 'Address:', ['class' => 'control-label', 'ng-model' => 'user.name']) !!}
-        {!! Form::text('address', null, ['class' => 'form-control']) !!}
+        {!! Form::label('email', 'Email') !!}
+        {!! Form::text('email', null, array( 'class'=>'form-control', 'ng-model'=> 'member.email')) !!}
       </div>
-
       <div class="form-group">
-        {!! Form::label('age', 'Age:', ['class' => 'control-label']) !!}
-        {!! Form::text('age', null, ['class' => 'form-control']) !!}
+        {!! Form::label('phone', 'Phone') !!}
+        {!! Form::text('phone', null, array( 'class'=>'form-control', 'ng-model' => 'member.phone')) !!}
       </div>
+      {!! Form::label('image', 'Upload avatar') !!}
+      {!! Form::file('image', null, array( 'class'=>'form-control', 'ng-model' => 'member.image')) !!}
 
-      {!! Form::label('photo', 'Photo') !!}
-      {!! Form::file('photo', null, array( 'class'=>'form-control')) !!}
+      {!! Form::submit( 'Add Member', array('class'=>'btn', 'ng-click' => 'saveData()', 'ng-if' => 'isEdit==false'))  !!}
 
-      {!! Form::submit('Create user', ['class' => 'btn btn-primary']) !!}
-      {!! Form::close() !!}
+      {!! Form::submit( 'Edit Member', array('class'=>'btn', 'ng-click'=> 'saveEditData()' , 'ng-if' => 'isEdit==true'))  !!}
+      <% member %>
+      <h1><%member.name%></h1>
+      <h1><%member.email%></h1>
+      <h1><%member.phone%></h1>
+      {{--{!! Form::close() !!}--}}
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-5">
+
+    <h1>List All Member</h1>
+    <div class="contain" ng-repeat="m in members">
+
+      <img class="avatar" src="<% m.image %>">
+      {{--<pre>@{{ m.name }}</pre>--}}
+
+      <pre class="name"><a href="member/<%m.id%> " name="link1" ng-click="Edit()"><%m.name%></a></pre>
+
+      <input type="button" name="<% m.id %>" ng-click="Edit(m.id)" value="Edit <% m.name %>"><br>
+      {{--{{ Form::checkbox('attending_lan', 'yes') }}--}}
       
-    </div> 
-    <!-- Current users -->
-    @if (count($users) > 0)
-      <div class="col-sm-7">
-        <h1>List of users</h1>
+      <input type="button" name="<% m.id %>" ng-click="deleteData(m.id)" value="Delete <% m.name %>"><br>
 
-        <div class="panel-body">
-          <table class="table table-bordered">
-            <thead>
-              <th>Id</th>
-              <th>Photo</th>
-              <th>Name</th>
-              <th>Address</th>
-              <th>Age</th>
-              <th>Action</th>
-            </thead>
+      <?php echo "<br />"; ?>
+    </div>
 
-            <tbody>
-              @foreach ($users as $user)
-                <tr>
-                  <td class="table-text">
-                    <div>{{ $user->id }}</div>
-                  </td>
-                  <!-- user Name -->
-                  <td width="100" height="100"><img src="avatar/{{ $user->photo }}" width="100" height="100"></td>
-                  <td>{{ $user->name }}</td>
-                  <td>{{ $user->address }}</td>
-                  <td>{{ $user->age }}</td>
+      <br>
 
-                  <!-- Delete Button -->
-                  <td>
-                    <a href="{{ route('user.edit', $user->id) }}" class="btn btn-info">Edit</a>
-                    <form action="/user/{{ $user->id }}" method="POST">
-                      {{ csrf_field() }}
-                      {{ method_field('DELETE') }}
-                      <button class="btn btn-danger">Delete</button>
-                    </form>
-                  </td>
-                </tr>
-              @endforeach
-            </tbody>
-          </table>
-        </div>
-      </div> 
-    @endif  
-  </div>  
-@endsection
+    </div>
+    {{--@foreach($members as $member)--}}
+    {{--<h1><a href="{{url('/member', $member->id)}}">{{$member -> name}}</a></h1>--}}
+
+    {{--<h3>  {{ Form::image($member->image, '',array('height'=>80, 'width'=> 80)   ) }}--}}
+    {{--</h3>--}}
+    {{--@endforeach--}}
+
+  </div>
+@stop
