@@ -4,6 +4,7 @@
 
   <div ng-app="hoandq" ng-controller="quanghoan">
     <div class="col-sm-4">
+      @include('common.errors')
       <h1>Add user</h1>
 
       {!! Form::open([
@@ -38,16 +39,21 @@
         <tr>
           <th>Id</th>
           <th>Photo</th>
-          <th>Name</th>
-          <th>Address</th>
-          <th>Age</th>
+          <th>
+            <button class="test" ng-click="sortBy('name')">Name</button>
+            <span ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>
+          </th>
+          <th><button class="test" ng-click="sortBy('address')">Address</button>
+            <span ng-show="propertyName === 'address'" ng-class="{reverse: reverse}"></span></th>
+          <th><button class="test" ng-click="sortBy('age')">Age</button>
+            <span ng-show="propertyName === 'age'" ng-class="{reverse: reverse}"></span></th>
           <th>Action</th>
-        </tr>  
+        </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="user in users">
+          <tr ng-repeat="user in users | orderBy:propertyName:reverse">
             <td><% user.id %></td>
-            <td width="100" height="100"><img src="avatar/<%user.photo%>" width="100" height="100"></td>
+            <td width="100" height="100"><img src="/avatar/<%user.photo%>" width="100" height="100"></td>
             <td><% user.name %></td>
             <td><% user.address %></td>
             <td><% user.age %></td>
@@ -60,4 +66,11 @@
       </table>
     </div>
   </div>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.test').click(function(event) {
+        event.preventDefault();
+      });
+    });
+  </script>
 @stop

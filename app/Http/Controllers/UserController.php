@@ -17,17 +17,17 @@ class UserController extends Controller
     $this->validate($request, [
       'name' => 'required|unique:users|max:100',
       'address' => 'required|max:300',
-      'age' => 'required|numeric|digits:2',
-      'photo' => 'required'
+      'age' => 'required|numeric|min:10|digits:2',
+      'photo' => 'required|max:1024'
     ]);
     $input = $request->all();
-    $photo = $request->file('photo');
-    $photo_name = $photo->getClientOriginalName();
-    $photo->move('avatar', $photo_name);
     $user = new User();
     $user->name = $input['name'];
     $user->address = $input['address'];
     $user->age = $input['age'];
+    $photo = $request->file('photo');
+    $photo_name = $photo->getClientOriginalName();
+    $photo->move('avatar', $photo_name);
     $user->photo = $photo_name;
     $user->save();
     return redirect('user');
@@ -59,7 +59,7 @@ class UserController extends Controller
       'name' => 'required|max:100',
       'address' => 'required|max:300',
       'age' => 'required|numeric|digits:2',
-      'photo' => 'required'
+      // 'photo' => 'required'
     ]);
     $input = $request->all();
     $user->name = $input['name'];

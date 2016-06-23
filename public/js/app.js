@@ -34,4 +34,12 @@ app.controller('quanghoan', function ($scope, $http) {
       data: JSON.stringify($scope.user),
     })
   };
+
+  $scope.propertyName = 'created_at';
+  $scope.reverse = true;
+  $scope.sortBy = function(propertyName) {
+    $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
+    $scope.propertyName = propertyName;
+  };
+
 });  
