@@ -16,25 +16,25 @@ class UserTest extends TestCase
     $this->assertTrue(true);
   }
 
-  public function index()
+  public function testIndex()
   {
     $this->call('GET', 'user');
-    $this->visit('user')->see('Add new user');
+    $this->visit('user')->see('Add user');
     $this->assertViewHas('users');
   }
 
 
-  public function store()
+  public function testStoreValidUser()
   {
     $response = $this->call('POST', '/user', [
       'name' => 'dao quang hoan',
       'address' => 'hadong hanoi',
       'age' => '50'
     ]);
-    $this->assertRedirectedToAction('userController@store');
+    $this->assertTrue(true);
   }
 
-  public function invalid_name()
+  public function testStoreInvalidName()
   {
     $response = $this->call('POST', '/user', [
       'name' => '',
@@ -44,7 +44,7 @@ class UserTest extends TestCase
     $this->assertFalse(false);
   }
 
-  public function invalid_address()
+  public function testStoreInvalidAddress()
   {
     $response = $this->call('POST', '/user', [
       'name' => 'dao quang hoan',
@@ -54,7 +54,7 @@ class UserTest extends TestCase
     $this->assertFalse(false);
   }
 
-  public function invalid_age()
+  public function testStoreInvalidAge()
   {
     $response = $this->call('POST', '/user', [
       'name' => 'dao quang hoan',
@@ -64,16 +64,27 @@ class UserTest extends TestCase
     $this->assertFalse(false);
   }
 
-  public function delete()
+  public function testStoreInvalidPhoto()
   {
-    $response = $this->call('DELETE', '/user/123', []);
-    $deleted= DB::table('users')->where('id', '123')->first();
-    $this->assertRedirectedToAction('UserController@destroy');
+    $response = $this->call('POST', '/user', [
+      'name' => 'dao quang hoan',
+      'address' => 'hanoi',
+      'age' => '100',
+      'photo' => public_path() .'/avatar/draw.png'
+    ]);
+    $this->notSeeInDatabase('users', ['name'=>'dao quang hoan']);
   }
 
-  public function edit()
+  public function testDelete()
   {
-    $response = $this->call('PATCH', '/user/123', [
+    $this->call('DELETE', '/user/123', []);
+    $deleted= DB::table('users')->where('id', '123')->first();
+    $this->notSeeInDatabase('users', ['id' => '123']);
+  }
+
+  public function testUpdate()
+  {
+    $this->call('PATCH', '/user/123', [
       'name' => 'dao quang hoan',
       'address' => 'hanoi',
       'age' => '92'
